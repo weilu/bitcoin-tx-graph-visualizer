@@ -69,6 +69,33 @@ function visualize(txGraph, containerSelector, margin) {
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
 
+  // css
+  svg.selectAll('.node rect')
+      .style({
+        cursor: "move",
+        "fill-opacity": .9,
+        "shape-rendering": "crispEdges"
+      })
+
+  svg.selectAll('.node text')
+      .style({
+        "pointer-events": "none",
+        "text-shadow": "0 1px 0 #fff"
+      })
+
+  svg.selectAll('.link')
+      .style({
+        fill: "none",
+        stroke: "#000",
+        "stroke-opacity": .2
+      })
+      .on('mouseover', function(){
+        d3.select(this).style({"stroke-opacity": .5});
+      })
+      .on('mouseout', function(){
+        d3.select(this).style({"stroke-opacity": .2});
+      })
+
   function dragmove(d) {
     d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
     sankey.relayout();
