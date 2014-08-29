@@ -9,8 +9,6 @@ function visualize(txGraph, containerSelector, margin) {
   var width = 960 - margin.left - margin.right
   var height = 500 - margin.top - margin.bottom
 
-  var formatNumber = d3.format(",.0f")
-  var format = function(d) { return formatNumber(d) + " TWh"; }
   var color = d3.scale.category20()
 
   var svg = d3.select(containerSelector).append("svg")
@@ -40,7 +38,7 @@ function visualize(txGraph, containerSelector, margin) {
       .sort(function(a, b) { return b.dy - a.dy; });
 
   link.append("title")
-      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + format(d.value); });
+      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + d.value; });
 
   var node = svg.append("g").selectAll(".node")
       .data(data.nodes)
@@ -58,7 +56,7 @@ function visualize(txGraph, containerSelector, margin) {
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
     .append("title")
-      .text(function(d) { return d.name + "\n" + format(d.value); });
+      .text(function(d) { return d.name + "\n" + d.value; });
 
   node.append("text")
       .attr("x", -6)
