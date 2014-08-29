@@ -1,10 +1,30 @@
 var d3 = require('d3')
 var d3sankey = require('./sankey')
 
-// Adapted from: http://bost.ocks.org/mike/sankey/
-function visualize(txGraph, containerSelector, margin) {
-  var data = exportData(txGraph)
+function exportData(graph) {
+  var txNodes = graph.getAllNodes()
+  var nodes = txNodes.map(function(n) {
+    var value, fee
+    if(n.tx) {
+      value = n.tx.value
+      fee = n.tx.fee
+    }
+    return { name: n.id, fee: fee, value: value }
+  })
 
+  var links = txNodes.reduce(function(memo, n, i) {
+    n.nextNodes.forEach(function(next) {
+      memo.push({ source: i, target: txNodes.indexOf(next), value: 1 })
+    })
+
+    return memo
+  }, [])
+
+  return { nodes: nodes, links: links }
+}
+
+// Adapted from: http://bost.ocks.org/mike/sankey/
+function visualizeWithData(data, containerSelector, margin) {
   var margin = margin || {top: 1, right: 1, bottom: 6, left: 1}
   var width = 960 - margin.left - margin.right
   var height = 500 - margin.top - margin.bottom
@@ -103,30 +123,14 @@ function visualize(txGraph, containerSelector, margin) {
   }
 }
 
-function exportData(graph) {
-  var txNodes = graph.getAllNodes()
-  var nodes = txNodes.map(function(n) {
-    var value, fee
-    if(n.tx) {
-      value = n.tx.value
-      fee = n.tx.fee
-    }
-    return { name: n.id, fee: fee, value: value }
-  })
-
-  var links = txNodes.reduce(function(memo, n, i) {
-    n.nextNodes.forEach(function(next) {
-      memo.push({ source: i, target: txNodes.indexOf(next), value: 1 })
-    })
-
-    return memo
-  }, [])
-
-  return { nodes: nodes, links: links }
+function visualize(txGraph, containerSelector, margin) {
+  var data = exportData(txGraph)
+  visualizeWithData(data, containerSelector, margin)
 }
 
 module.exports = {
-  visualize: visualize,
-  exportData: exportData
+  exportData: exportData,
+  visualizeWithData: visualizeWithData,
+  visualize: visualize
 }
 
