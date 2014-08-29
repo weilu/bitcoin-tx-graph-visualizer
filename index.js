@@ -1,4 +1,5 @@
 var d3 = require('d3')
+var d3sankey = require('./sankey')
 
 // Adapted from: http://bost.ocks.org/mike/sankey/
 function visualize(txGraph, containerSelector, margin) {
@@ -18,7 +19,7 @@ function visualize(txGraph, containerSelector, margin) {
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var sankey = d3.sankey()
+  var sankey = d3sankey()
       .nodeWidth(15)
       .nodePadding(10)
       .size([width, height]);
@@ -28,7 +29,7 @@ function visualize(txGraph, containerSelector, margin) {
   sankey
       .nodes(data.nodes)
       .links(data.links)
-      .layout(32);
+      .layout(32, width);
 
   var link = svg.append("g").selectAll(".link")
       .data(data.links)
@@ -98,3 +99,4 @@ module.exports = {
   visualize: visualize,
   exportData: exportData
 }
+

@@ -40,10 +40,10 @@ module.exports = function() {
     return sankey;
   };
 
-  sankey.layout = function(iterations) {
+  sankey.layout = function(iterations, width) {
     computeNodeLinks();
     computeNodeValues();
-    computeNodeBreadths();
+    computeNodeBreadths(width);
     computeNodeDepths(iterations);
     computeLinkDepths();
     return sankey;
@@ -111,7 +111,7 @@ module.exports = function() {
   // Nodes are assigned the maximum breadth of incoming neighbors plus one;
   // nodes with no incoming links are assigned breadth zero, while
   // nodes with no outgoing links are assigned the maximum breadth.
-  function computeNodeBreadths() {
+  function computeNodeBreadths(width) {
     var remainingNodes = nodes,
         nextNodes,
         x = 0;
@@ -294,4 +294,5 @@ module.exports = function() {
 
   return sankey;
 };
+
 
