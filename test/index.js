@@ -27,7 +27,7 @@ describe('visualize', function() {
         if(!tx) return;
 
         assert.equal(n.fee, tx.fee)
-        assert.equal(n.value, tx.value)
+        assert.equal(n.amount, tx.value)
       })
     })
 

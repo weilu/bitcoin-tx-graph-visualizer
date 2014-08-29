@@ -9,7 +9,7 @@ function exportData(graph) {
       value = n.tx.value
       fee = n.tx.fee
     }
-    return { name: n.id, fee: fee, value: value }
+    return { name: n.id, fee: fee, amount: value }
   })
 
   var links = txNodes.reduce(function(memo, n, i) {
@@ -76,7 +76,7 @@ function visualizeWithData(data, containerSelector, margin) {
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
     .append("title")
-      .text(function(d) { return d.name + "\nvalue: " + d.value + "\nfee: " + d.fee; });
+      .text(function(d) { return d.name + "\nvalue: " + d.amount + "\nfee: " + d.fee; });
 
   node.append("text")
       .attr("x", -6)
