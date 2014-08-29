@@ -1,0 +1,31 @@
+{
+  "name": "bitcoin-tx-graph-visualizer",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weilu/bitcoin-tx-graph-visualizer.git"
+  },
+  "author": "Wei Lu <luwei.here@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weilu/bitcoin-tx-graph-visualizer/issues"
+  },
+  "homepage": "https://github.com/weilu/bitcoin-tx-graph-visualizer",
+  "dependencies": {
+    "d3": "^3.4.11"
+  },
+  "devDependencies": {
+    "bitcoin-tx-graph": "^1.0.0",
+    "bitcoinjs-lib": "^1.0.2",
+    "mocha": "^1.21.4",
+    "sinon": "^1.10.3"
+  }
+}
