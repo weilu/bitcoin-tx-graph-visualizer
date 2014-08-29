@@ -1,7 +1,7 @@
 {
   "name": "bitcoin-tx-graph-visualizer",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Visualize a graph of bitcoin transactions using d3.js",
   "main": "index.js",
   "directories": {
     "test": "test"
