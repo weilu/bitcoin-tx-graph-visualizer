@@ -8,7 +8,11 @@ describe('visualize', function() {
   var txs = buildTxs()
   var graph = new TxGraph()
 
-  txs.forEach(function(tx) { graph.addTx(tx) })
+  txs.forEach(function(tx) {
+    tx.value = parseInt(Math.random() * 1000)
+    tx.fee = parseInt(Math.random() * 10)
+    graph.addTx(tx)
+  })
 
   describe('exportData', function() {
     var data = exportData(graph)
@@ -17,6 +21,14 @@ describe('visualize', function() {
       var expectedIds = [0, 3, 4, 15, 16, 13, 2, 5, 7, 14, 1, 10, 6, 11, 8, 9, 12]
       var actualNames = data.nodes.map(function(n) { return n.name })
       assert.deepEqual(actualNames, expectedIds.map(fakeTxId))
+
+      data.nodes.forEach(function(n) {
+        var tx = graph.findNodeById(n.name).tx
+        if(!tx) return;
+
+        assert.equal(n.fee, tx.fee)
+        assert.equal(n.value, tx.value)
+      })
     })
 
     it('returns the expected links', function() {

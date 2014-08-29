@@ -38,7 +38,7 @@ function visualize(txGraph, containerSelector, margin) {
       .sort(function(a, b) { return b.dy - a.dy; });
 
   link.append("title")
-      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + d.value; });
+      .text(function(d) { return d.source.name + " → " + d.target.name });
 
   var node = svg.append("g").selectAll(".node")
       .data(data.nodes)
@@ -56,7 +56,7 @@ function visualize(txGraph, containerSelector, margin) {
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
     .append("title")
-      .text(function(d) { return d.name + "\n" + d.value; });
+      .text(function(d) { return d.name + "\nvalue: " + d.value + "\nfee: " + d.fee; });
 
   node.append("text")
       .attr("x", -6)
@@ -106,7 +106,12 @@ function visualize(txGraph, containerSelector, margin) {
 function exportData(graph) {
   var txNodes = graph.getAllNodes()
   var nodes = txNodes.map(function(n) {
-    return { name: n.id }
+    var value, fee
+    if(n.tx) {
+      value = n.tx.value
+      fee = n.tx.fee
+    }
+    return { name: n.id, fee: fee, value: value }
   })
 
   var links = txNodes.reduce(function(memo, n, i) {
