@@ -1,5 +1,6 @@
 var sinon = require('sinon')
 var Transaction = require('bitcoinjs-lib').Transaction
+var ECKey = require('bitcoinjs-lib').ECKey
 
 function fakeTxHash(i) {
   var hash = new Buffer(32)
@@ -26,36 +27,43 @@ function buildTxs() {
     txs[i] = fakeTx(i)
   }
 
-  txs[0].addInput(fakeTxId(13), 0)
+  addInputAndOutput(txs[0], txs[13], 0)
 
-  txs[2].addInput(fakeTxId(1), 0)
-  txs[2].addInput(fakeTxId(10), 1)
+  addInputAndOutput(txs[2], txs[1], 0)
+  addInputAndOutput(txs[2], txs[10], 0)
 
-  txs[3].addInput(fakeTxId(2), 0)
-  txs[3].addInput(fakeTxId(5), 1)
-  txs[3].addInput(fakeTxId(7), 2)
+  addInputAndOutput(txs[14], txs[2], 0)
+  addInputAndOutput(txs[3], txs[2], 1)
 
-  txs[4].addInput(fakeTxId(7), 0)
+  addInputAndOutput(txs[3], txs[5], 0)
+  addInputAndOutput(txs[3], txs[7], 0)
 
-  txs[5].addInput(fakeTxId(6), 0)
+  addInputAndOutput(txs[4], txs[7], 1)
 
-  txs[6].addInput(fakeTxId(8), 0)
-  txs[6].addInput(fakeTxId(9), 1)
+  addInputAndOutput(txs[5], txs[6], 0)
 
-  txs[7].addInput(fakeTxId(6), 0)
+  addInputAndOutput(txs[6], txs[8], 0)
+  addInputAndOutput(txs[6], txs[9], 0)
 
-  txs[8].addInput(fakeTxId(10), 0)
+  addInputAndOutput(txs[7], txs[6], 1)
 
-  txs[9].addInput(fakeTxId(10), 0)
-  txs[9].addInput(fakeTxId(12), 1)
+  addInputAndOutput(txs[8], txs[10], 1)
 
-  txs[10].addInput(fakeTxId(11), 0)
+  addInputAndOutput(txs[9], txs[10], 2)
+  addInputAndOutput(txs[9], txs[12], 0)
 
-  txs[14].addInput(fakeTxId(2), 0)
-  txs[15].addInput(fakeTxId(14), 0)
-  txs[16].addInput(fakeTxId(14), 0)
+  addInputAndOutput(txs[10], txs[11], 0)
+
+  addInputAndOutput(txs[15], txs[14], 0)
+  addInputAndOutput(txs[16], txs[14], 1)
 
   return txs
+}
+
+function addInputAndOutput(tx, prevTx, prevOutputIndex) {
+  tx.addInput(prevTx.getId(), prevOutputIndex)
+  var value = (prevOutputIndex + 1) * 1000
+  prevTx.addOutput(ECKey.makeRandom().pub.getAddress(), value)
 }
 
 module.exports = {

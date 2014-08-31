@@ -32,34 +32,41 @@ describe('visualize', function() {
     })
 
     it('returns the expected links', function() {
-      var sortedLinks = data.links.sort(function(a, b) {
+      var sortFn = function(a, b) {
         var targetDiff = a.target - b.target
         if(targetDiff !== 0) {
           return targetDiff
         }
 
         return a.source - b.source
+      }
+      var sortedLinks = data.links.sort(sortFn)
+
+      var expectedLinks = [
+        { source: 5, target: 0, value: 1000 },
+        { source: 6, target: 1, value: 2000 },
+        { source: 7, target: 1, value: 1000 },
+        { source: 8, target: 1, value: 1000 },
+        { source: 8, target: 2, value: 2000 },
+        { source: 9, target: 3, value: 1000 },
+        { source: 9, target: 4, value: 2000 },
+        { source: 10, target: 6, value: 1000 },
+        { source: 11, target: 6, value: 1000 },
+        { source: 12, target: 7, value: 1000 },
+        { source: 12, target: 8, value: 2000 },
+        { source: 6, target: 9, value: 1000 },
+        { source: 13, target: 11, value: 1000 },
+        { source: 14, target: 12, value: 1000 },
+        { source: 15, target: 12, value: 1000 },
+        { source: 11, target: 14, value: 2000 },
+        { source: 11, target: 15, value: 3000 },
+        { source: 16, target: 15, value: 1000 }
+      ].sort(sortFn)
+
+      assert.equal(sortedLinks.length, expectedLinks.length)
+      expectedLinks.forEach(function(l, i) {
+        assert.deepEqual(sortedLinks[i], l)
       })
-      assert.deepEqual(data.links, [
-        { source: 5, target: 0, value: 1},
-        { source: 6, target: 1, value: 1},
-        { source: 7, target: 1, value: 1},
-        { source: 8, target: 1, value: 1},
-        { source: 8, target: 2, value: 1},
-        { source: 9, target: 3, value: 1},
-        { source: 9, target: 4, value: 1},
-        { source: 10, target: 6, value: 1},
-        { source: 11, target: 6, value: 1},
-        { source: 12, target: 7, value: 1},
-        { source: 12, target: 8, value: 1},
-        { source: 6, target: 9, value: 1},
-        { source: 13, target: 11, value: 1},
-        { source: 14, target: 12, value: 1},
-        { source: 15, target: 12, value: 1},
-        { source: 11, target: 14, value: 1},
-        { source: 11, target: 15, value: 1},
-        { source: 16, target: 15, value: 1}
-      ])
     })
   })
 })

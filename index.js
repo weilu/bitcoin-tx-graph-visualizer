@@ -13,8 +13,11 @@ function exportData(graph) {
   })
 
   var links = txNodes.reduce(function(memo, n, i) {
-    n.nextNodes.forEach(function(next) {
-      memo.push({ source: i, target: txNodes.indexOf(next), value: 1 })
+    n.nextNodes.forEach(function(next, j) {
+      if(next) {
+        var value = n.tx && n.tx.outs[j] ? n.tx.outs[j].value : 1
+        memo.push({ source: i, target: txNodes.indexOf(next), value: value })
+      }
     })
 
     return memo
@@ -58,7 +61,7 @@ function visualizeWithData(data, containerSelector, margin) {
       .sort(function(a, b) { return b.dy - a.dy; });
 
   link.append("title")
-      .text(function(d) { return d.source.name + " → " + d.target.name });
+      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + d.value });
 
   var node = svg.append("g").selectAll(".node")
       .data(data.nodes)
