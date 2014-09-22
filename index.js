@@ -4,19 +4,13 @@ var d3sankey = require('./sankey')
 function exportData(graph) {
   var txNodes = graph.getAllNodes()
   var nodes = txNodes.map(function(n) {
-    var value, fee
-    if(n.tx) {
-      value = n.tx.value
-      fee = n.tx.fee
-    }
-    return { name: n.id, fee: fee, amount: value }
+    return { name: n.id }
   })
 
   var links = txNodes.reduce(function(memo, n, i) {
     n.nextNodes.forEach(function(next, j) {
       if(next) {
-        var value = n.tx && n.tx.outs[j] ? n.tx.outs[j].value : 1
-        memo.push({ source: i, target: txNodes.indexOf(next), value: value })
+        memo.push({ source: i, target: txNodes.indexOf(next), value: 1 })
       }
     })
 
@@ -61,7 +55,7 @@ function visualizeWithData(data, containerSelector, margin) {
       .sort(function(a, b) { return b.dy - a.dy; });
 
   link.append("title")
-      .text(function(d) { return d.source.name + " → " + d.target.name + "\n" + d.value });
+      .text(function(d) { return d.source.name + " → " + d.target.name });
 
   var node = svg.append("g").selectAll(".node")
       .data(data.nodes)
@@ -79,7 +73,7 @@ function visualizeWithData(data, containerSelector, margin) {
       .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
       .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
     .append("title")
-      .text(function(d) { return d.name + "\nvalue: " + d.amount + "\nfee: " + d.fee; });
+      .text(function(d) { return d.name; });
 
   node.append("text")
       .attr("x", -6)
