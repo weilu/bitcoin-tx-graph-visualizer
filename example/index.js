@@ -1,5 +1,13 @@
-var visualize = require('../').visualizeWithData
-var data = require('./transactions')
+var visualize = require('../').visualize
+var bitcoin = require('bitcoinjs-lib')
+var TxGraph = require('bitcoin-tx-graph')
 
-visualize(data, 'body')
+var graph = new TxGraph()
+
+var txs = require('./txs.json')
+txs.forEach(function(txHex) {
+  graph.addTx(bitcoin.Transaction.fromHex(txHex))
+})
+
+visualize(graph, 'body')
 
